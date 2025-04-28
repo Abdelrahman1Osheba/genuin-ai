@@ -3456,6 +3456,53 @@ def update_database_schema():
     print("Database schema recreated successfully!")
 
 
+# ... (keep all previous imports and classes unchanged)
+
+class App:
+    def __init__(self):
+        self.config = Config()
+        self.rag_folder = "Rag_document"
+        if not os.path.exists(self.rag_folder):
+            os.makedirs(self.rag_folder)
+        self.rag_manager = RAGManager(self.rag_folder)
+        self.user_manager = UserManager()
+        self.pdf_processor = PDFProcessor()
+        self.langchain_manager = LangchainManager()
+        self.suicide_detector = SuicideDetector()
+        self.report_generator = ReportGenerator()
+        self.ui_manager = UIManager(self.user_manager, self.pdf_processor, self.langchain_manager,
+                                    self.suicide_detector, self.report_generator, self.rag_manager)
+        self.appointment_system = AppointmentSystem()
+
+    def run(self):
+        # Initialize panel with material template
+        pn.extension(template='material', notifications=True)
+        
+        # Create main template
+        template = pn.template.MaterialTemplate(
+            title="SouLLMate - Your Personal Psychiatrist Assistant",
+            header_background="#2c5f2d",
+            header_color="white"
+        )
+        
+        # Create dashboard components
+        dashboard = self.ui_manager.create_dashboard()
+        
+        # Add components to template
+        template.main.append(dashboard)
+        
+        # Mark template as servable
+        template.servable()
+        
+        # Serve the application
+        pn.serve(
+            {'/': template},
+            port=8080,
+            address='0.0.0.0',
+            show=False,
+            static_dirs={'Rag_document': self.rag_folder}
+        )
+
 if __name__ == "__main__":
     update_database_schema()
     app = App()
