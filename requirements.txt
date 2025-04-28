@@ -11,5 +11,5 @@
  python-docx
  pdf2image
  psycopg2-binary  
- gunicorn          
- langchain-community
+ gunicorn    
+ langchain-community      
